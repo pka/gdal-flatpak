@@ -1,0 +1,89 @@
+{
+    "id" : "org.osgeo.gdal",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "19.08",
+    "sdk": "org.freedesktop.Sdk",
+    "command": "gdalinfo",
+    "finish-args": [
+        "--filesystem=host",
+        "--share=network",
+        "--share=ipc"
+    ],
+    "modules" : [
+        {
+            "name" : "gdal",
+            "config-opts" : [
+                "--with-python=python3",
+                "--with-libtiff=internal"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz",
+                    "sha256" : "6793ddb2b1ca042494d938ac82c71d06b9125bbb00c9bb9414a7c5e3a707c639"
+                }
+            ],
+            "modules" : [
+                {
+                    "name" : "proj",
+                    "sources" : [
+                        {
+                            "type" : "git",
+                            "url" : "https://github.com/OSGeo/PROJ.git",
+                            "branch" : "7.0.1"
+                        }
+                    ],
+                    "#modules" : [
+                        {
+                            "name" : "proj-datumgrid",
+                            "sources" : [
+                                {
+                                    "type" : "archive",
+                                    "url" : "http://download.osgeo.org/proj/proj-datumgrid-latest.zip",
+                                    "sha256" : "3dc9b150d218b0e280a3d6a41d93c1e45f4d7155829d75f1e5bf3e0b0de6750d"
+                                },
+                                {
+                                    "type": "script",
+                                    "dest-filename": "autogen.sh",
+                                    "commands": [
+                                        "unzip -q -j -u -o proj-datumgrid-latest.zip  -d /usr/local/share/proj"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name" : "postgresql",
+                    "sources" : [
+                        {
+                            "type" : "archive",
+                            "url" : "https://ftp.postgresql.org/pub/source/v12.2/postgresql-12.2.tar.bz2",
+                            "sha256" : "ad1dcc4c4fc500786b745635a9e1eba950195ce20b8913f50345bb7d5369b5de"
+                        }
+                    ]
+                },
+                {
+                    "name" : "swig",
+                    "config-opts" : [
+                        "--without-boost",
+                        "--without-pcre",
+                        "--without-alllang",
+                        "--with-python3"
+                    ],
+                    "cleanup" : [
+                        "/bin",
+                        "/share/swig"
+                    ],
+                    "sources" : [
+                        {
+                            "type" : "archive",
+                            "url" : "http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz",
+                            "sha256" : "7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
